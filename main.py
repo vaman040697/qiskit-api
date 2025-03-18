@@ -55,7 +55,9 @@ def custom_openapi():
                 }
             }
         },
-        "components": {}
+        "components": {  # Fix: Ensure schemas object exists
+            "schemas": {}
+        }
     }
     return openapi_schema
 
