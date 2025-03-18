@@ -13,7 +13,7 @@ async def create_colab_notebook(name: str = Query("New Notebook")):
     file_metadata = {
         "name": f"{name}.ipynb",
         "mimeType": "application/vnd.google.colaboratory",
-        "parents": ["root"]
+        "parents": ["1wcJ53gfaXy7_Wt97M0hBPTt3vvh14bcB"]
     }
 
     file = drive_service.files().create(body=file_metadata).execute()
