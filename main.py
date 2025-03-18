@@ -9,37 +9,54 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Define OpenAPI schema in the correct format
+# Define OpenAPI schema in the correct format for OpenAI
 def custom_openapi():
-    if app.openapi_schema:
-        return app.openapi_schema
-    openapi_schema = get_openapi(
-        title="Qiskit API",
-        version="1.0.0",
-        description="Search the latest Qiskit documentation dynamically.",
-        routes=app.routes,
-    )
-    openapi_schema["openapi"] = "3.1.0"  # Set OpenAPI version
-    openapi_schema["servers"] = [{"url": "https://qiskit-api.onrender.com"}]  # Ensure OpenAI finds the API
-    openapi_schema["paths"] = {
-        "/search_qiskit": {
-            "get": {
-                "description": "Search Qiskit documentation for relevant information.",
-                "operationId": "SearchQiskitDocs",
-                "parameters": [
-                    {
-                        "name": "query",
-                        "in": "query",
-                        "description": "The search query related to Qiskit documentation.",
-                        "required": True,
-                        "schema": {"type": "string"}
-                    }
-                ],
-                "deprecated": False
+    openapi_schema = {
+        "openapi": "3.1.0",
+        "info": {
+            "title": "Qiskit API",
+            "description": "Searches the latest Qiskit documentation dynamically.",
+            "version": "1.0.0"
+        },
+        "servers": [
+            {"url": "https://qiskit-api.onrender.com"}  # Ensure OpenAI detects the API
+        ],
+        "paths": {
+            "/search_qiskit": {
+                "get": {
+                    "summary": "Search Qiskit documentation",
+                    "description": "Retrieve relevant sections from Qiskit documentation.",
+                    "operationId": "SearchQiskitDocs",
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "in": "query",
+                            "description": "The search query related to Qiskit documentation.",
+                            "required": True,
+                            "schema": {"type": "string"}
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Successful response",
+                            "content": {
+                                "application/json": {
+                                    "example": {
+                                        "query": "quantum gates",
+                                        "results": [
+                                            {"url": "https://docs.quantum.ibm.com/api/qiskit/", "snippet": "Qiskit SDK API documentation..."}
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "deprecated": False
+                }
             }
-        }
+        },
+        "components": {}
     }
-    app.openapi_schema = openapi_schema
-    return app.openapi_schema
+    return openapi_schema
 
 app.openapi = custom_openapi  # Apply OpenAPI format fix
