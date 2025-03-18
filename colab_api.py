@@ -4,7 +4,7 @@ from drive_auth import authenticate_drive
 
 colab_router = APIRouter()
 
-@colab_router.post("/create_colab_notebook")  # <-- Correct route
+@colab_router.post("/create_colab_notebook")  # <-- New API route for Google Colab
 async def create_colab_notebook(name: str = Query("New Notebook")):
     creds = authenticate_drive()
     drive_service = build("drive", "v3", credentials=creds)
