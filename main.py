@@ -9,7 +9,11 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Define OpenAPI schema in the correct format for OpenAI
+@app.get("/search_qiskit")  # Ensure this matches exactly
+async def search_qiskit(query: str = Query(...)):
+    return {"query": query, "results": [{"url": "https://docs.quantum.ibm.com/api/qiskit/", "snippet": "Qiskit SDK API documentation..."}]}
+
+# Custom OpenAPI Schema
 def custom_openapi():
     openapi_schema = {
         "openapi": "3.1.0",
@@ -18,11 +22,9 @@ def custom_openapi():
             "description": "Searches the latest Qiskit documentation dynamically.",
             "version": "1.0.0"
         },
-        "servers": [
-            {"url": "https://qiskit-api.onrender.com"}  # Ensure OpenAI detects the API
-        ],
+        "servers": [{"url": "https://qiskit-api.onrender.com"}],
         "paths": {
-            "/search_qiskit": {
+            "/search_qiskit": {  # Make sure this matches FastAPI route
                 "get": {
                     "summary": "Search Qiskit documentation",
                     "description": "Retrieve relevant sections from Qiskit documentation.",
@@ -43,9 +45,7 @@ def custom_openapi():
                                 "application/json": {
                                     "example": {
                                         "query": "quantum gates",
-                                        "results": [
-                                            {"url": "https://docs.quantum.ibm.com/api/qiskit/", "snippet": "Qiskit SDK API documentation..."}
-                                        ]
+                                        "results": [{"url": "https://docs.quantum.ibm.com/api/qiskit/", "snippet": "Qiskit SDK API documentation..."}]
                                     }
                                 }
                             }
@@ -55,10 +55,8 @@ def custom_openapi():
                 }
             }
         },
-        "components": {  # Fix: Ensure schemas object exists
-            "schemas": {}
-        }
+        "components": {"schemas": {}}
     }
     return openapi_schema
 
-app.openapi = custom_openapi  # Apply OpenAPI format fix
+app.openapi = custom_openapi  # Apply OpenAPI fix
