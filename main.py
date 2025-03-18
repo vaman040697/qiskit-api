@@ -2,6 +2,7 @@ from fastapi import FastAPI, Query
 import requests
 from bs4 import BeautifulSoup
 from fastapi.openapi.utils import get_openapi
+from colab_api import colab_router  # Import the new API module
 
 app = FastAPI(
     title="Qiskit API",
@@ -12,6 +13,9 @@ app = FastAPI(
 @app.get("/search_qiskit")  # Ensure this matches exactly
 async def search_qiskit(query: str = Query(...)):
     return {"query": query, "results": [{"url": "https://docs.quantum.ibm.com/api/qiskit/", "snippet": "Qiskit SDK API documentation..."}]}
+
+# Include Google Colab API without affecting Qiskit functionality
+app.include_router(colab_router)
 
 # Custom OpenAPI Schema
 def custom_openapi():
