@@ -2,7 +2,13 @@ from fastapi import FastAPI, Query
 import requests
 from bs4 import BeautifulSoup
 
-app = FastAPI()
+app = FastAPI(
+    title="Qiskit API",
+    version="1.0",
+    servers=[
+        {"url": "https://qiskit-api.onrender.com"}  # This fixes the 'servers' issue
+    ]
+)
 
 # List of main Qiskit documentation URLs
 qiskit_main_pages = [
